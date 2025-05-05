@@ -1,6 +1,6 @@
 
 import { useEffect, useState } from 'react';
-import { db } from './firebaseConfig';
+import { db } from "../firebaseConfig";
 import { collection, getDocs, doc, setDoc, addDoc } from 'firebase/firestore';
 import axios from 'axios';
 
