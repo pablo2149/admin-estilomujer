@@ -1,0 +1,55 @@
+.clientas-container {
+    padding: 2rem;
+    background-color: #fff;
+    min-height: 100vh;
+  }
+  
+  .clientas-title {
+    font-size: 2.2rem;
+    color: #d10030;
+    margin-bottom: 2rem;
+    text-align: center;
+  }
+  
+  .clientas-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+  }
+  
+  .clienta-card {
+    background-color: #d10030;
+    color: #fff;
+    padding: 1.2rem 1.5rem;
+    border-radius: 12px;
+    width: 280px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.2s;
+  }
+  
+  .clienta-card:hover {
+    transform: scale(1.03);
+  }
+  .header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
+  
+  .export-btn {
+    background-color: #d10030;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .export-btn:hover {
+    background-color: #a80026;
+  }
+    

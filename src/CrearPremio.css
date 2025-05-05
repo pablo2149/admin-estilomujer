@@ -1,0 +1,35 @@
+.crear-premio-container {
+    padding: 2rem;
+    max-width: 500px;
+    margin: auto;
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
+  }
+  
+  .crear-premio-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .crear-premio-form input,
+  .crear-premio-form button {
+    padding: 0.8rem;
+    font-size: 1rem;
+  }
+  
+  .crear-premio-form button {
+    background-color: #d10030;
+    color: white;
+    border: none;
+    cursor: pointer;
+  }
+  
+  .mensaje {
+    margin-top: 1rem;
+    font-weight: bold;
+    color: #d10030;
+    text-align: center;
+  }
+  

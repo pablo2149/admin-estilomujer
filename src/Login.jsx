@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import './Login.css';
 
 export default function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -6,68 +7,37 @@ export default function Login({ onLogin }) {
 
   const handleLogin = (e) => {
     e.preventDefault();
-    // Datos fijos de administrador
-    const adminEmail = 'admin@estilomujer.com';
-    const adminPassword = '123456'; // Cambialo si querés algo más seguro
-
-    if (email === adminEmail && password === adminPassword) {
-      localStorage.setItem('admin-logged', 'true');
-      onLogin();
+    // Por ahora usamos credenciales fijas (puede ser reemplazado por Firebase Auth u otro backend)
+    if (email === 'admin@estilomujer.com' && password === 'estilo123') {
+      localStorage.setItem('adminLoggedIn', 'true');
+      onLogin(true);
     } else {
-      alert('Credenciales incorrectas 🚫');
+      alert('Credenciales incorrectas. Intente nuevamente.');
     }
   };
 
   return (
-    <div style={styles.container}>
-      <h1>Admin - Estilo Mujer</h1>
-      <form onSubmit={handleLogin} style={styles.form}>
-        <input
-          type="email"
-          placeholder="Correo"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          style={styles.input}
-        />
-        <input
-          type="password"
-          placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          style={styles.input}
-        />
-        <button type="submit" style={styles.button}>
-          Iniciar sesión
-        </button>
-      </form>
+    <div className="login-container">
+      <div className="login-box">
+        <h2>Panel Estilo Mujer</h2>
+        <form onSubmit={handleLogin}>
+          <input
+            type="email"
+            placeholder="Correo electrónico"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+          <input
+            type="password"
+            placeholder="Contraseña"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+          <button type="submit">Ingresar</button>
+        </form>
+      </div>
     </div>
   );
 }
-
-const styles = {
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: '100px',
-  },
-  form: {
-    display: 'flex',
-    flexDirection: 'column',
-    width: '300px',
-    gap: '15px',
-  },
-  input: {
-    padding: '10px',
-    fontSize: '16px',
-  },
-  button: {
-    padding: '10px',
-    fontSize: '16px',
-    backgroundColor: '#d10030',
-    color: 'white',
-    border: 'none',
-    borderRadius: '5px',
-    cursor: 'pointer',
-  },
-};

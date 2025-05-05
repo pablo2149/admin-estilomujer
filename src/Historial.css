@@ -1,0 +1,38 @@
+
+.contenedor-historial {
+    padding: 20px;
+    max-width: 800px;
+    margin: auto;
+  }
+  
+  h2 {
+    text-align: center;
+    color: #d10030;
+    margin-bottom: 30px;
+  }
+  
+  .mensaje {
+    text-align: center;
+    font-size: 18px;
+    color: #777;
+  }
+  
+  .card-historial {
+    background-color: #d10030;
+    color: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    text-align: center;
+  }
+  
+  .card-historial h3 {
+    margin: 0 0 10px;
+    font-size: 22px;
+  }
+  
+  .card-historial p {
+    margin: 5px 0;
+  }
+  
