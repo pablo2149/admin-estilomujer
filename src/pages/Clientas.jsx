@@ -1,53 +1,79 @@
 import { useEffect, useState } from 'react';
-import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../firebaseConfig';
-import * as XLSX from 'xlsx';
-import { saveAs } from 'file-saver';
-import './Clientas.css';
+import { collection, getDocs, updateDoc, query, where, doc } from 'firebase/firestore';
 
 export default function Clientas() {
-  const [clientas, setClientas] = useState([]);
+  const [usuarios, setUsuarios] = useState([]);
+  const [dniBusqueda, setDniBusqueda] = useState('');
+  const [puntosACargar, setPuntosACargar] = useState('');
+  const [usuarioEncontrado, setUsuarioEncontrado] = useState(null);
 
   useEffect(() => {
-    const fetchClientas = async () => {
-      const snapshot = await getDocs(collection(db, 'usuarios'));
-      const data = snapshot.docs.map(doc => ({
-        id: doc.id,
-        ...doc.data(),
-      }));
-      setClientas(data);
+    const fetchUsuarios = async () => {
+      const usuariosRef = collection(db, 'usuarios');
+      const snapshot = await getDocs(usuariosRef);
+      const lista = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      setUsuarios(lista);
     };
 
-    fetchClientas();
+    fetchUsuarios();
   }, []);
 
-  const exportarExcel = () => {
-    const worksheet = XLSX.utils.json_to_sheet(clientas);
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Clientas');
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    const dataBlob = new Blob([excelBuffer], { type: 'application/octet-stream' });
-    saveAs(dataBlob, 'clientas.xlsx');
+  const buscarPorDni = async () => {
+    const usuariosRef = collection(db, 'usuarios');
+    const q = query(usuariosRef, where('dni', '==', dniBusqueda));
+    const snapshot = await getDocs(q);
+
+    if (snapshot.empty) {
+      alert('No se encontró ninguna clienta con ese DNI.');
+      setUsuarioEncontrado(null);
+      return;
+    }
+
+    const usuaria = snapshot.docs[0];
+    setUsuarioEncontrado({ id: usuaria.id, ...usuaria.data() });
+  };
+
+  const cargarPuntos = async () => {
+    if (!usuarioEncontrado) return;
+    const usuariaRef = doc(db, 'usuarios', usuarioEncontrado.id);
+    const nuevosPuntos = (usuarioEncontrado.puntos || 0) + parseInt(puntosACargar);
+
+    await updateDoc(usuariaRef, { puntos: nuevosPuntos });
+    alert(`Se cargaron ${puntosACargar} puntos a ${usuarioEncontrado.nombre || usuarioEncontrado.email}`);
+    setUsuarioEncontrado(null);
+    setDniBusqueda('');
+    setPuntosACargar('');
   };
 
   return (
-    <div className="clientas-container">
-      <div className="header-row">
-        <h1 className="clientas-title">Lista de Clientas</h1>
-        <button className="export-btn" onClick={exportarExcel}>
-          Exportar a Excel
-        </button>
-      </div>
+    <div style={{ padding: '2rem' }}>
+      <h2>🔍 Buscar clienta por DNI</h2>
+      <input
+        type="text"
+        placeholder="DNI"
+        value={dniBusqueda}
+        onChange={(e) => setDniBusqueda(e.target.value)}
+        style={{ marginRight: '1rem' }}
+      />
+      <button onClick={buscarPorDni}>Buscar</button>
 
-      <div className="clientas-list">
-        {clientas.map((c) => (
-          <div key={c.id} className="clienta-card">
-            <p><strong>Nombre:</strong> {c.nombre || 'Sin nombre'}</p>
-            <p><strong>Email:</strong> {c.email}</p>
-            <p><strong>Puntos:</strong> {c.puntos ?? 0}</p>
-          </div>
-        ))}
-      </div>
+      {usuarioEncontrado && (
+        <div style={{ marginTop: '2rem' }}>
+          <p><strong>Nombre:</strong> {usuarioEncontrado.nombre}</p>
+          <p><strong>Email:</strong> {usuarioEncontrado.email}</p>
+          <p><strong>Puntos actuales:</strong> {usuarioEncontrado.puntos ?? 0}</p>
+
+          <input
+            type="number"
+            placeholder="Puntos a cargar"
+            value={puntosACargar}
+            onChange={(e) => setPuntosACargar(e.target.value)}
+            style={{ marginRight: '1rem' }}
+          />
+          <button onClick={cargarPuntos}>➕ Cargar puntos</button>
+        </div>
+      )}
     </div>
   );
 }
